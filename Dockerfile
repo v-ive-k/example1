@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # 4. Compile the helloworld.java file
-RUN javac HelloWorld.java
+RUN javac src/main/java/com/example/helloworld.java
 
 # 5. Run the helloworld class
-CMD ["java", "helloworld"]
+CMD ["java", "-cp", "src/main/java", "com.example.helloworld"]
