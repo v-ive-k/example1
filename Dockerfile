@@ -5,7 +5,7 @@ FROM openjdk:17-alpine
 WORKDIR /app
 
 # 3. Copy the helloworld.java file into the container at /app
-COPY HelloWorld.java .
+COPY . .
 
 # 4. Compile the helloworld.java file
 RUN javac HelloWorld.java
