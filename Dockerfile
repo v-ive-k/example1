@@ -1,5 +1,5 @@
 # Use the official Maven image to build the application
-FROM maven:3.8.7-openjdk-17 AS build
+FROM maven:3.8.7-eclipse-temurin-17 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,7 +15,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Second stage: Create a minimal runtime environment
-FROM openjdk:17-alpine
+FROM eclipse-temurin:17-jdk-alpine
 
 # Set the working directory for the runtime container
 WORKDIR /app
