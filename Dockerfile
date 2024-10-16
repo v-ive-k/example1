@@ -1,24 +1,14 @@
-# Use the official Maven image to build the application
-FROM maven:3.9.4-openjdk-17-slim AS build
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the pom.xml and source code
-COPY pom.xml .
-COPY src ./src
-
-# Build the application (skip tests)
-RUN mvn clean package -DskipTests
-
-# Use a smaller image to run the application
+# Use the official OpenJDK image as a base
 FROM openjdk:17-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the JAR file from the build stage
-COPY --from=build /app/target/myproject-1.0-SNAPSHOT.jar app.jar
+# Copy the HelloWorld.java file into the container
+COPY . .
 
-# Run the application
-CMD ["java", "-jar", "app.jar"]
+# Compile the HelloWorld.java file
+RUN javac HelloWorld.java
+
+# Run the HelloWorld class
+CMD ["java", "HelloWorld"]
