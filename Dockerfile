@@ -1,14 +1,24 @@
-# 1. Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-alpine
+# Use the official Maven image
+FROM maven:3.9.4-openjdk-17-slim AS build
 
-# 2. Set the working directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# 3. Copy the helloworld.java file into the container at /app
-COPY . .
+# Copy the pom.xml file and the source code
+COPY pom.xml .
+COPY src ./src
 
-# 4. Compile the helloworld.java file
-RUN javac src/main/java/com/example/helloworld.java
+# Build the application (skip tests)
+RUN mvn clean package -DskipTests
 
-# 5. Run the helloworld class
-CMD ["java", "-cp", "src/main/java", "com.example.helloworld"]
+# Use a smaller image to run the application
+FROM openjdk:17-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the jar file from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Run the application
+CMD ["java", "-jar", "app.jar"]
