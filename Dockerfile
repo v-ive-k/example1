@@ -1,27 +1,15 @@
-# Use the official Maven image to build the application
-FROM maven:3.8.7-eclipse-temurin-17 AS build
+# Use Maven to build and run the application
+FROM maven:3.9.9-eclipse-temurin-17
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the pom.xml and download dependencies
-COPY pom.xml ./
-RUN mvn dependency:go-offline
+# Copy the application code
+COPY pom.xml .
+COPY src ./src
 
-# Copy the entire project into the container
-COPY . .
-
-# Build the Maven project (this will compile the Java code and package it into a .jar file)
+# Build the application
 RUN mvn clean package -DskipTests
 
-# Second stage: Create a minimal runtime environment
-FROM eclipse-temurin:17-jdk-alpine
-
-# Set the working directory for the runtime container
-WORKDIR /app
-
-# Copy the generated jar file from the Maven build stage
-COPY --from=build /app/target/*.jar /app/HelloWorld.jar
-
 # Run the application
-CMD ["java", "-jar", "HelloWorld.jar"]
+ENTRYPOINT ["java", "-jar", "target/your-app.jar"]
