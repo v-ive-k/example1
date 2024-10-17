@@ -11,5 +11,5 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests
 
-# Run the compiled HelloWorld class
-CMD ["java", "HelloWorld"]
+# Run the generated JAR file (assuming it's located in the target directory)
+CMD ["java", "-cp", "target/classes", "sample.HelloWorld"]
